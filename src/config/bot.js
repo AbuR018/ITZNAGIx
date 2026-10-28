@@ -51,7 +51,7 @@ export const botConfig = {
     maintenanceMode: process.env.MAINTENANCE_MODE === "true",
    // Command prefix for text-based commands (e.g., "$deal").
    // Supports both slash commands and prefix commands.
-   prefix: process.env.PREFIX || "$",
+   prefix: "$",
   
   },
 
