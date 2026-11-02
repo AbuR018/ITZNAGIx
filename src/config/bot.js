@@ -1,4 +1,4 @@
-import { logger } from '../utils/logger.js';
+pimport { logger } from '../utils/logger.js';
 
 export const botConfig = {
   // =========================
@@ -649,42 +649,6 @@ export function getRandomColor() {
 }
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 
-export default {
-    data: new SlashCommandBuilder()
-        .setName('deal')
-        .setDescription('Record a customer purchase')
-        .addUserOption(option =>
-            option.setName('target-user')
-                .setDescription('The customer who bought from you')
-                .setRequired(true))
-        .addStringOption(option =>
-            option.setName('payment')
-                .setDescription('What they bought')
-                .setRequired(true))
-        .addNumberOption(option =>
-            option.setName('price')
-                .setDescription('How much they paid')
-                .setMinValue(0.01)
-                .setRequired(true)),
-
-    async execute(interaction) {
-        const customer = interaction.options.getUser('target-user');
-        const payment = interaction.options.getString('payment');
-        const price = interaction.options.getNumber('price');
-
-        const embed = new EmbedBuilder()
-            .setColor('#57F287')
-            .setTitle('🛍️ New Sale Recorded!')
-            .addFields(
-                { name: 'Customer', value: `${customer}`, inline: true },
-                { name: 'Purchase', value: payment, inline: true },
-                { name: 'Price', value: `$${price.toFixed(2)}`, inline: true },
-                { name: 'Seller', value: `${interaction.user}`, inline: true }
-            )
-            .setTimestamp();
-
-        await interaction.reply({ embeds: [embed] });
-    }
 };
 
 export default botConfig;
