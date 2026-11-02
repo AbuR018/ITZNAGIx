@@ -647,9 +647,5 @@ export function getRandomColor() {
   );
   return colors[Math.floor(Math.random() * colors.length)];
 }
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-
-};
 
 export default botConfig;
-};
