@@ -1,6 +1,6 @@
 pimport { logger } from '../utils/logger.js';
 
-export const botConfig = {
+export const botConfig = {botconfig
   // =========================
   // BOT PRESENCE (what users see under the bot name)
   // =========================
