@@ -1,1 +1,108 @@
 
+import {
+  SlashCommandBuilder,
+  EmbedBuilder,
+  PermissionFlagsBits,
+} from 'discord.js';
+
+import { botConfig, getColor } from '../../config/config.js';
+
+export default {
+  data: new SlashCommandBuilder()
+    .setName('deal-done')
+    .setDescription('Post a completed deal')
+    .addUserOption(option =>
+      option
+        .setName('target_user')
+        .setDescription('The customer')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('product')
+        .setDescription('Product sold')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('payment')
+        .setDescription('Payment amount')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('price')
+        .setDescription('Deal price')
+        .setRequired(true)
+    ),
+
+  async execute(interaction) {
+    // Only server members with Manage Messages can post deals.
+    if (!interaction.memberPermissions?.has(
+      PermissionFlagsBits.ManageMessages
+    )) {
+      return interaction.reply({
+        content: 'You do not have permission to use this command.',
+        ephemeral: true,
+      });
+    }
+
+    const customer = interaction.options.getUser('target_user');
+    const product = interaction.options.getString('product');
+    const payment = interaction.options.getString('payment');
+    const price = interaction.options.getString('price');
+
+    // Prevent accidental mass mentions in user-provided text.
+    const safeProduct = product.replace(/@/g, '@\u200b');
+    const safePayment = payment.replace(/@/g, '@\u200b');
+    const safePrice = price.replace(/@/g, '@\u200b');
+
+    const dealReference = `${Date.now()}-${interaction.id}`;
+
+    const embed = new EmbedBuilder()
+      .setColor(getColor('success'))
+      .setTitle('✅ Flex Shop • Deal Completed')
+      .setThumbnail(customer.displayAvatarURL())
+      .addFields(
+        {
+          name: 'Customer',
+          value: `${customer}\n${customer.username}`,
+          inline: false,
+        },
+        {
+          name: 'Product(s)',
+          value: safeProduct,
+          inline: false,
+        },
+        {
+          name: 'Payment',
+          value: safePayment,
+          inline: true,
+        },
+        {
+          name: 'Price',
+          value: safePrice,
+          inline: true,
+        },
+        {
+          name: 'Completed by',
+          value: `${interaction.user}`,
+          inline: false,
+        },
+        {
+          name: 'Deal reference',
+          value: `\`${dealReference}\``,
+          inline: false,
+        }
+      )
+      .setFooter({
+        text: 'FLEX SHOP • Trusted & Reliable',
+      })
+      .setTimestamp();
+
+    await interaction.reply({
+      embeds: [embed],
+    });
+  },
+};
+
