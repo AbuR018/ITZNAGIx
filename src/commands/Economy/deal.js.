@@ -1,1 +1,77 @@
 
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { getColor } from '../../config/bot.js';
+
+export default {
+  data: new SlashCommandBuilder()
+    .setName('deal')
+    .setDescription('Record a sale to another user')
+    .addUserOption(option =>
+      option
+        .setName('target-user')
+        .setDescription('Who bought from you?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('payment')
+        .setDescription('How did they pay?')
+        .setRequired(true)
+        .addChoices(
+          { name: 'Cash', value: 'Cash' },
+          { name: 'Bank', value: 'Bank' },
+          { name: 'Other', value: 'Other' }
+        )
+    )
+    .addNumberOption(option =>
+      option
+        .setName('price')
+        .setDescription('How much was the sale?')
+        .setRequired(true)
+        .setMinValue(0.01)
+    ),
+
+  async execute(interaction) {
+    const buyer = interaction.options.getUser('target-user');
+    const payment = interaction.options.getString('payment');
+    const price = interaction.options.getNumber('price');
+
+    if (buyer.id === interaction.user.id || buyer.bot) {
+      return interaction.reply({
+        content: 'Please select another human user.',
+        ephemeral: true
+      });
+    }
+
+    const embed = new EmbedBuilder()
+      .setColor(getColor('success'))
+      .setTitle('🛍️ Sale Recorded')
+      .addFields(
+        {
+          name: 'Seller',
+          value: `${interaction.user}`,
+          inline: true
+        },
+        {
+          name: 'Buyer',
+          value: `${buyer}`,
+          inline: true
+        },
+        {
+          name: 'Payment',
+          value: payment,
+          inline: true
+        },
+        {
+          name: 'Price',
+          value: `${price.toFixed(2)}`,
+          inline: true
+        }
+      )
+      .setTimestamp()
+      .setFooter({ text: 'Titan Bot' });
+
+    return interaction.reply({ embeds: [embed] });
+  }
+};
+
