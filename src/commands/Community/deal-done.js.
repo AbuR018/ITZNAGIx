@@ -1,34 +1,39 @@
 
+
 import {
   SlashCommandBuilder,
   EmbedBuilder,
   PermissionFlagsBits,
 } from 'discord.js';
 
-import { botConfig, getColor } from '../../config/config.js';
+import { getColor } from '../../config/config.js';
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('deal-done')
-    .setDescription('Post a completed deal')
+    .setName('deal')
+    .setDescription("Post a completed deal for Debt's Shop")
+
     .addUserOption(option =>
       option
         .setName('target_user')
         .setDescription('The customer')
         .setRequired(true)
     )
+
     .addStringOption(option =>
       option
         .setName('product')
         .setDescription('Product sold')
         .setRequired(true)
     )
+
     .addStringOption(option =>
       option
         .setName('payment')
         .setDescription('Payment amount')
         .setRequired(true)
     )
+
     .addStringOption(option =>
       option
         .setName('price')
@@ -37,7 +42,6 @@ export default {
     ),
 
   async execute(interaction) {
-    // Only server members with Manage Messages can post deals.
     if (!interaction.memberPermissions?.has(
       PermissionFlagsBits.ManageMessages
     )) {
@@ -52,16 +56,11 @@ export default {
     const payment = interaction.options.getString('payment');
     const price = interaction.options.getString('price');
 
-    // Prevent accidental mass mentions in user-provided text.
-    const safeProduct = product.replace(/@/g, '@\u200b');
-    const safePayment = payment.replace(/@/g, '@\u200b');
-    const safePrice = price.replace(/@/g, '@\u200b');
-
     const dealReference = `${Date.now()}-${interaction.id}`;
 
     const embed = new EmbedBuilder()
       .setColor(getColor('success'))
-      .setTitle('✅ Flex Shop • Deal Completed')
+      .setTitle("✅ Debt's Shop • Deal Completed")
       .setThumbnail(customer.displayAvatarURL())
       .addFields(
         {
@@ -71,17 +70,17 @@ export default {
         },
         {
           name: 'Product(s)',
-          value: safeProduct,
+          value: product.slice(0, 1024),
           inline: false,
         },
         {
           name: 'Payment',
-          value: safePayment,
+          value: payment.slice(0, 1024),
           inline: true,
         },
         {
           name: 'Price',
-          value: safePrice,
+          value: price.slice(0, 1024),
           inline: true,
         },
         {
@@ -96,13 +95,13 @@ export default {
         }
       )
       .setFooter({
-        text: 'FLEX SHOP • Trusted & Reliable',
+        text: "DEBT'S SHOP • Trusted & Reliable",
       })
       .setTimestamp();
 
     await interaction.reply({
       embeds: [embed],
+      allowedMentions: { parse: [] },
     });
   },
 };
-
