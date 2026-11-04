@@ -97,3 +97,395 @@ export default {
     return interaction.reply({ embeds: [embed] });
   }
 };
+
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { getColor } from '../../config/bot.js';
+
+export default {
+  data: new SlashCommandBuilder()
+    .setName('deal')
+    .setDescription('Record a completed deal at Debt\'s Shop')
+    .addUserOption(option =>
+      option
+        .setName('target-user')
+        .setDescription('Who bought from you?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('product')
+        .setDescription('What did they buy?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('payment')
+        .setDescription('How did they pay?')
+        .setRequired(true)
+        .addChoices(
+          { name: 'Cash', value: 'Cash' },
+          { name: 'Bank', value: 'Bank' },
+          { name: 'Other', value: 'Other' }
+        )
+    )
+    .addNumberOption(option =>
+      option
+        .setName('price')
+        .setDescription('How much was the sale?')
+        .setRequired(true)
+        .setMinValue(0.01)
+    ),
+
+  async execute(interaction) {
+    const buyer = interaction.options.getUser('target-user');
+    const product = interaction.options.getString('product');
+    const payment = interaction.options.getString('payment');
+    const price = interaction.options.getNumber('price');
+
+    if (buyer.id === interaction.user.id || buyer.bot) {
+      return interaction.reply({
+        content: 'Please select another human user.',
+        ephemeral: true
+      });
+    }
+
+    const receipt = 'RD-' +
+      Math.floor(100000 + Math.random() * 900000);
+
+    const embed = new EmbedBuilder()
+      .setColor('#36C878')
+      .setTitle('🤝 Deal Completed')
+      .addFields(
+        {
+          name: 'Customer',
+          value: `${buyer}`,
+          inline: false
+        },
+        {
+          name: 'Items',
+          value: product,
+          inline: false
+        },
+        {
+          name: 'Price',
+          value: `$${price.toFixed(2)}`,
+          inline: true
+        },
+        {
+          name: 'Payment',
+          value: payment,
+          inline: true
+        },
+        {
+          name: 'Completed by',
+          value: `${interaction.user}`,
+          inline: false
+        },
+        {
+          name: 'Receipt',
+          value: receipt,
+          inline: false
+        }
+      )
+      .setTimestamp()
+      .setFooter({
+        text: "Debt's Shop • Deal Completed"
+      });
+
+    return interaction.reply({ embeds: [embed] });
+  }
+};
+
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { getColor } from '../../config/bot.js';
+
+export default {
+  data: new SlashCommandBuilder()
+    .setName('deal')
+    .setDescription('Record a completed deal at Debt\'s Shop')
+    .addUserOption(option =>
+      option
+        .setName('target-user')
+        .setDescription('Who bought from you?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('product')
+        .setDescription('What did they buy?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('payment')
+        .setDescription('How did they pay?')
+        .setRequired(true)
+        .addChoices(
+          { name: 'Cash', value: 'Cash' },
+          { name: 'Bank', value: 'Bank' },
+          { name: 'Other', value: 'Other' }
+        )
+    )
+    .addNumberOption(option =>
+      option
+        .setName('price')
+        .setDescription('How much was the sale?')
+        .setRequired(true)
+        .setMinValue(0.01)
+    ),
+
+  async execute(interaction) {
+    const buyer = interaction.options.getUser('target-user');
+    const product = interaction.options.getString('product');
+    const payment = interaction.options.getString('payment');
+    const price = interaction.options.getNumber('price');
+
+    if (buyer.id === interaction.user.id || buyer.bot) {
+      return interaction.reply({
+        content: 'Please select another human user.',
+        ephemeral: true
+      });
+    }
+
+    const receipt = 'RD-' +
+      Math.floor(100000 + Math.random() * 900000);
+
+    const embed = new EmbedBuilder()
+      .setColor('#36C878')
+      .setTitle('🤝 Deal Completed')
+      .addFields(
+        {
+          name: 'Customer',
+          value: `${buyer}`,
+          inline: false
+        },
+        {
+          name: 'Items',
+          value: product,
+          inline: false
+        },
+        {
+          name: 'Price',
+          value: `$${price.toFixed(2)}`,
+          inline: true
+        },
+        {
+          name: 'Payment',
+          value: payment,
+          inline: true
+        },
+        {
+          name: 'Completed by',
+          value: `${interaction.user}`,
+          inline: false
+        },
+        {
+          name: 'Receipt',
+          value: receipt,
+          inline: false
+        }
+      )
+      .setTimestamp()
+      .setFooter({
+        text: "Debt's Shop • Deal Completed"
+      });
+
+    return interaction.reply({ embeds: [embed] });
+  }
+};
+
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { getColor } from '../../config/bot.js';
+
+export default {
+  data: new SlashCommandBuilder()
+    .setName('deal')
+    .setDescription('Record a completed deal at Debt\'s Shop')
+    .addUserOption(option =>
+      option
+        .setName('target-user')
+        .setDescription('Who bought from you?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('product')
+        .setDescription('What did they buy?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('payment')
+        .setDescription('How did they pay?')
+        .setRequired(true)
+        .addChoices(
+          { name: 'Cash', value: 'Cash' },
+          { name: 'Bank', value: 'Bank' },
+          { name: 'Other', value: 'Other' }
+        )
+    )
+    .addNumberOption(option =>
+      option
+        .setName('price')
+        .setDescription('How much was the sale?')
+        .setRequired(true)
+        .setMinValue(0.01)
+    ),
+
+  async execute(interaction) {
+    const buyer = interaction.options.getUser('target-user');
+    const product = interaction.options.getString('product');
+    const payment = interaction.options.getString('payment');
+    const price = interaction.options.getNumber('price');
+
+    if (buyer.id === interaction.user.id || buyer.bot) {
+      return interaction.reply({
+        content: 'Please select another human user.',
+        ephemeral: true
+      });
+    }
+
+    const receipt = 'RD-' +
+      Math.floor(100000 + Math.random() * 900000);
+
+    const embed = new EmbedBuilder()
+      .setColor('#36C878')
+      .setTitle('🤝 Deal Completed')
+      .addFields(
+        {
+          name: 'Customer',
+          value: `${buyer}`,
+          inline: false
+        },
+        {
+          name: 'Items',
+          value: product,
+          inline: false
+        },
+        {
+          name: 'Price',
+          value: `$${price.toFixed(2)}`,
+          inline: true
+        },
+        {
+          name: 'Payment',
+          value: payment,
+          inline: true
+        },
+        {
+          name: 'Completed by',
+          value: `${interaction.user}`,
+          inline: false
+        },
+        {
+          name: 'Receipt',
+          value: receipt,
+          inline: false
+        }
+      )
+      .setTimestamp()
+      .setFooter({
+        text: "Debt's Shop • Deal Completed"
+      });
+
+    return interaction.reply({ embeds: [embed] });
+  }
+};
+
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { getColor } from '../../config/bot.js';
+
+export default {
+  data: new SlashCommandBuilder()
+    .setName('deal')
+    .setDescription('Record a completed deal at Debt\'s Shop')
+    .addUserOption(option =>
+      option
+        .setName('target-user')
+        .setDescription('Who bought from you?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('product')
+        .setDescription('What did they buy?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('payment')
+        .setDescription('How did they pay?')
+        .setRequired(true)
+        .addChoices(
+          { name: 'Cash', value: 'Cash' },
+          { name: 'Bank', value: 'Bank' },
+          { name: 'Other', value: 'Other' }
+        )
+    )
+    .addNumberOption(option =>
+      option
+        .setName('price')
+        .setDescription('How much was the sale?')
+        .setRequired(true)
+        .setMinValue(0.01)
+    ),
+
+  async execute(interaction) {
+    const buyer = interaction.options.getUser('target-user');
+    const product = interaction.options.getString('product');
+    const payment = interaction.options.getString('payment');
+    const price = interaction.options.getNumber('price');
+
+    if (buyer.id === interaction.user.id || buyer.bot) {
+      return interaction.reply({
+        content: 'Please select another human user.',
+        ephemeral: true
+      });
+    }
+
+    const receipt = 'RD-' +
+      Math.floor(100000 + Math.random() * 900000);
+
+    const embed = new EmbedBuilder()
+      .setColor('#36C878')
+      .setTitle('🤝 Deal Completed')
+      .addFields(
+        {
+          name: 'Customer',
+          value: `${buyer}`,
+          inline: false
+        },
+        {
+          name: 'Items',
+          value: product,
+          inline: false
+        },
+        {
+          name: 'Price',
+          value: `$${price.toFixed(2)}`,
+          inline: true
+        },
+        {
+          name: 'Payment',
+          value: payment,
+          inline: true
+        },
+        {
+          name: 'Completed by',
+          value: `${interaction.user}`,
+          inline: false
+        },
+        {
+          name: 'Receipt',
+          value: receipt,
+          inline: false
+        }
+      )
+      .setTimestamp()
+      .setFooter({
+        text: "Debt's Shop • Deal Completed"
+      });
+
+    return interaction.reply({ embeds: [embed] });
+  }
+};
