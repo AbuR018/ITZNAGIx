@@ -1,3 +1,7 @@
+import {
+    handleCreateTicket,
+    handleTicketReason
+} from '../commands/ticket/modules/ticket_creation.js';
 import { Events, MessageFlags } from 'discord.js';
 import { logger } from '../utils/logger.js';
 import { getGuildConfig } from '../services/config/guildConfig.js';
@@ -307,6 +311,15 @@ export default {
             }
           }
         } else if (interaction.isButton()) {
+          if (interaction.customId === 'create_ticket') {
+    await handleCreateTicket(interaction, client);
+    return;
+}
+
+if (interaction.customId.startsWith('ticket_reason_')) {
+    await handleTicketReason(interaction, client);
+    return;
+}
           if (interaction.customId.startsWith('shared_todo_')) {
             const parts = interaction.customId.split('_');
             const buttonType = parts.slice(0, 3).join('_');
