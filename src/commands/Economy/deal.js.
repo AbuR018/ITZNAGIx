@@ -1,15 +1,22 @@
 
+
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { getColor } from '../../config/bot.js';
 
 export default {
   data: new SlashCommandBuilder()
     .setName('deal')
-    .setDescription('Record a sale to another user')
+    .setDescription('Record a completed deal at Debt\'s Shop')
     .addUserOption(option =>
       option
         .setName('target-user')
         .setDescription('Who bought from you?')
+        .setRequired(true)
+    )
+    .addStringOption(option =>
+      option
+        .setName('product')
+        .setDescription('What did they buy?')
         .setRequired(true)
     )
     .addStringOption(option =>
@@ -33,6 +40,7 @@ export default {
 
   async execute(interaction) {
     const buyer = interaction.options.getUser('target-user');
+    const product = interaction.options.getString('product');
     const payment = interaction.options.getString('payment');
     const price = interaction.options.getNumber('price');
 
@@ -43,18 +51,26 @@ export default {
       });
     }
 
+    const receipt = 'RD-' +
+      Math.floor(100000 + Math.random() * 900000);
+
     const embed = new EmbedBuilder()
-      .setColor(getColor('success'))
-      .setTitle('🛍️ Sale Recorded')
+      .setColor('#36C878')
+      .setTitle('🤝 Deal Completed')
       .addFields(
         {
-          name: 'Seller',
-          value: `${interaction.user}`,
-          inline: true
+          name: 'Customer',
+          value: `${buyer}`,
+          inline: false
         },
         {
-          name: 'Buyer',
-          value: `${buyer}`,
+          name: 'Items',
+          value: product,
+          inline: false
+        },
+        {
+          name: 'Price',
+          value: `$${price.toFixed(2)}`,
           inline: true
         },
         {
@@ -63,15 +79,21 @@ export default {
           inline: true
         },
         {
-          name: 'Price',
-          value: `${price.toFixed(2)}`,
-          inline: true
+          name: 'Completed by',
+          value: `${interaction.user}`,
+          inline: false
+        },
+        {
+          name: 'Receipt',
+          value: receipt,
+          inline: false
         }
       )
       .setTimestamp()
-      .setFooter({ text: 'Titan Bot' });
+      .setFooter({
+        text: "Debt's Shop • Deal Completed"
+      });
 
     return interaction.reply({ embeds: [embed] });
   }
 };
-
